@@ -4,13 +4,17 @@
 	"description": "A REST API project, part of Free Code Camp's curriculum",
 	"main": "index.js",
 	"scripts": {
-		"start": "node index.js"
+		"start": "node index.js",
+		"build": "netlify deploy --prod"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
-		"express": "^4.16.4",
-		"mongoose": "^8.7.0"
+		"express": "^4.21.0",
+		"mongoose": "^8.7.0",
+		"netlify-cli": "^17.36.4",
+		"netlify-lambda": "^2.0.16",
+		"serverless-http": "^3.2.0"
 	},
 	"repository": {
 		"url": "https://github.com/freeCodeCamp/boilerplate-project-exercisetracker"
