@@ -56,11 +56,11 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     _id = req.params._id || req.body[':_id']
     let count = 1
     let checkUserLog = await Users.find({ _id: _id })
-    console.log(checkUserLog)
+    // console.log(checkUserLog)
     checkUserLog = checkUserLog[0]
 
     count = checkUserLog.log.length + count
-    console.log(count, '2cccccc');
+    // console.log(count, '2cccccc');
 
 
     if (!date) {
@@ -114,26 +114,27 @@ app.get('/api/users', async (req, res) => {
 
 app.get('/api/users/:_id/logs', async (req, res) => {
   try {
-    console.log(req.query, 'ssddss')
-    let limit = 10 || req.query.limit
+    console.log(req.query, 'ssddss',req.params)
+    let limit =  parseInt(req.query.limit)
     if (req.query.from && req.query.to) {
       Users.find({
         _id: req.params._id, "log.date": {
           $gte: `${req.query.from}T00:00:00.000Z`,
-          $lte:`${req.query.to}T23:59:59.000Z`
+          $lte:`${req.query.to}T23:59:59.000Z`,
+          
 
         }
-      }, { "log._id": 0, __v: 0 }).then(data => {
+      }, { "log._id": 0, __v: 0}).limit(limit).then(data => {
 
-        console.log(data)
+        // console.log(data)
         if (data.length > 0) {
           data[0] = data[0].toObject()
           if (data[0].log.length > 0) {
             data[0].log.forEach(logs => {
               logs.date = new Date(logs.date).toDateString();
-              console.log(logs.date)
+              // console.log(logs.date)
             })
-            console.log(data[0].log[0].date,'ggggggg');
+            // console.log(data[0].log[0].date,'ggggggg');
           }
           data=data[0]
           let obj = {
@@ -142,6 +143,14 @@ app.get('/api/users/:_id/logs', async (req, res) => {
             _id: data._id,
             log: data.log
           }
+          
+            console.log(limit,'ssss');
+            limit=obj.log.length-limit
+            if(limit>0){
+             obj.log.splice(limit)
+          }
+         
+          console.log(obj)
           return res.json(obj)
         }else {
           return res.json([])
@@ -151,21 +160,26 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     } else {
       Users.findById(req.params._id, { "log._id": 0, __v: 0 }).then(data => {
         data = data.toObject()
-        console.log(data)
+        // console.log(data)
         if (data.log.length > 0) {
           data.log.forEach(logs => {
             logs.date = new Date(logs.date).toDateString();
-            console.log(logs.date)
+            // console.log(logs.date)
           })
           // console.log(logData[0]);
         }
-        console.log(data)
+        // console.log(data)
         let obj = {
           username: data.username,
           count: data.count,
           _id: data._id,
           log: data.log
         }
+          console.log(limit,'ssss');
+            limit=obj.log.length-limit
+            if(limit>0){
+             obj.log.splice(limit)
+          }
         return res.json(obj)
       })
     }
