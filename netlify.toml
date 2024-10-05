@@ -1,3 +1,2 @@
 [build]
-  functions = "functions"  # Remove this line if you're not using serverless functions
-  publish = "views"        # Ensure this folder contains your index.html and assets
+  functions = "functions"  
